@@ -1,0 +1,48 @@
+{% extends 'appointment/base.html' %}
+
+{% block title %}Products | Docto-ppointment{% endblock %}
+
+{% block content %}
+<main class="page-content">
+    <h1>Products</h1>
+    <p>Add medical products here.</p>
+    {% if can_upload %}
+    <section class="product-form">
+        <h2>Upload a Product</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload Product</button>
+        </form>
+    </section>
+    {% else %}
+    <section class="product-form">
+        <h2>Admin-only upload</h2>
+        <p>Only superusers can upload medical products.</p>
+    </section>
+    {% endif %}
+    <section class="product-list">
+        <h2>Available Products</h2>
+        {% if products %}
+            <ul>
+                {% for product in products %}
+                    <li>
+                        <strong>{{ product.name }}</strong> - ₦{{ product.price }}<br>
+                        {{ product.description }}<br>
+                        {% if product.file %}
+                            {% if product.is_image %}
+                                <div class="product-preview">
+                                    <img src="{{ product.file.url }}" alt="{{ product.name }} preview">
+                                </div>
+                            {% endif %}
+                            <a href="{{ product.file.url }}" target="_blank">Download file</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No products available yet.</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,9 @@
+<html>
+  <body>
+    <h2>New contact inquiry: {{ inquiry.subject }}</h2>
+    <p><strong>Name:</strong> {{ inquiry.name }}</p>
+    <p><strong>Email:</strong> {{ inquiry.email }}</p>
+    <hr>
+    <p>{{ inquiry.message|linebreaks }}</p>
+  </body>
+</html>

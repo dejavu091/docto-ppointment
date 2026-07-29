@@ -1,0 +1,8 @@
+New appointment request: {{ appt.name }}
+
+Name: {{ appt.name }}
+Email: {{ appt.email }}
+Phone: {{ appt.phone }}
+Department: {{ appt.department }}
+Date: {{ appt.date }}
+Time: {{ appt.time }}

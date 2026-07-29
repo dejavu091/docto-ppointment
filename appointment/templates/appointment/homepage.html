@@ -1,0 +1,113 @@
+{% extends 'appointment/base.html' %}
+
+{% block title %}Doctor's Appointments{% endblock %}
+
+{% block hero %}
+    <div class="hero-content">
+        <img class="back" src="/static/appointment/assets/background.png" alt="">
+        {% comment %} <a class="btn" href="{% url 'pricing' %}">Get Quote</a> {% endcomment %}
+        <div class="meet">
+            <h2>Meet the Best Hospital</h2>
+        </div>
+        <div class="text">
+            <p>Skip the long queue, get appointments at the nearest hospital close to you!</p>
+        </div>
+        <div class="btns">
+            {% comment %} <a id="get-quote" class="btn" href="{% url 'pricing' %}">Get Quote Now</a> {% endcomment %}
+            <a id="learn-more" class="btn" href="{% url 'about' %}">Learn More</a>
+        </div>
+        <div class="appointment">
+            <h2 class="book">Book an Appointment</h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ appointment_form.non_field_errors }}
+
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label for="id_name">Name</label>
+                        {{ appointment_form.name }}
+                        {% for err in appointment_form.name.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row">
+                        <label for="id_email">Email</label>
+                        {{ appointment_form.email }}
+                        {% for err in appointment_form.email.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row">
+                        <label for="id_phone">Phone</label>
+                        {{ appointment_form.phone }}
+                        {% for err in appointment_form.phone.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row">
+                        <label for="id_department">Preferred Department</label>
+                        {{ appointment_form.department }}
+                        {% for err in appointment_form.department.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row">
+                        <label for="id_date">Preferred Date</label>
+                        {{ appointment_form.date }}
+                        {% for err in appointment_form.date.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row">
+                        <label for="id_time">Preferred Time</label>
+                        {{ appointment_form.time }}
+                        {% for err in appointment_form.time.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row full">
+                        <button type="submit" id="one">Book an appointment</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="branding"><i class="fas fa-stethoscope"></i>Docto-ppointment</div>
+    <p class="branding" id="we">We are the leading healthcare appointments provider, our reputation speaks for us, we lead, we don't follow!</p>
+    <h2 class="testimony">Testimonials From World-known Doctors</h2>
+    <div class="doctors">
+        <div class="doctor">
+            <img src="/static/appointment/assets/doctor 1.png" alt="">
+            <p>Docto-ppointment makes my job easier</p><br>
+            <p>Dr Singh Bali</p>
+            <p>Ophthalmologist</p>
+        </div>
+        <div class="doctor">
+            <img src="/static/appointment/assets/doctor 2.png" alt="">
+            <p>A very user friendly website, thumbs up!</p><br>
+            <p>Dr Petter Durry</p>
+            <p>Obstetrician</p>
+        </div>
+        <div class="doctor">
+            <img src="/static/appointment/assets/doctor 3.png" alt="">
+            <p>I recommend this for everyone, they are the best</p><br>
+            <p>Dr Fahad Muhammed</p>
+            <p>Surgeon</p>
+        </div>
+        <div class="doctor">
+            <img src="/static/appointment/assets/doctor 4.png" alt="">
+            <p>Best of its kind, I recommend this for everyone</p><br>
+            <p>Dr Orlando Owoh</p>
+            <p>Endocrinologist</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'appointment/base.html' %}
+
+{% block title %}Pricing | Docto-ppointment{% endblock %}
+
+{% block content %}
+<main class="page-content">
+    <h1>Pricing</h1>
+    <p>Dummy pricing plans for hospital services.</p>
+    <section class="pricing-cards">
+        {% for plan in plans %}
+            <article class="pricing-card">
+                <h2>{{ plan.name }}</h2>
+                <p>{{ plan.description }}</p>
+                <p class="price">₦{{ plan.price }}</p>
+            </article>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

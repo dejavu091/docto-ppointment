@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Docto-ppointment{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'appointment/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <header>
+        <div class="page-header">
+            <div class="brand-container">
+                <div class="brand"><i class="fas fa-stethoscope"></i></div>
+                <div class="brand-name">Docto-ppointment</div>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'products' %}">Products</a>
+                <a href="{% url 'pricing' %}">Pricing</a>
+                <a href="{% url 'contact' %}">Contact</a>
+            </div>
+        </div>
+        {% block hero %}{% endblock %}
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <p>&copy; 2026 Docto-ppointment. All rights reserved.</p>
+    </footer>
+    <script src="{% static 'appointment/notification.js' %}" defer></script>
+</body>
+</html>

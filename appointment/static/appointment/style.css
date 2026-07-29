@@ -1,0 +1,551 @@
+@font-face {
+    font-family: inter;
+    src: url(assets/static/Inter_28pt-Regular.ttf) format("truetype");
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    overflow-x: hidden;
+    font-family: inter;
+}
+.messages{
+    width: 100%;
+    padding: 16px 24px;
+    background-color: rgba(35, 166, 240, 0.12);
+    color: #0f172a;
+    border-left: 4px solid #23a6f0;
+    margin-bottom: 16px;
+}
+
+/* Smooth fade + collapse for on-screen notifications */
+.messages{
+    overflow: hidden;
+    max-height: 300px; /* allow room for transitions */
+    transition: opacity 0.5s ease, max-height 0.5s ease, transform 0.5s ease, padding 0.5s ease, margin 0.5s ease;
+}
+.messages.fade-out{
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-8px);
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+.message{
+    max-width: 1100px;
+    margin: 0 auto;
+    font-weight: 600;
+}
+header{
+    position: relative;
+    color: white;
+    padding: 24px 24px 0;
+}
+.page-header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+.brand-container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.brand{
+    font-size: 2rem;
+    font-family: inter;
+    color: black;
+}
+.brand-name{
+    font-size: 1.4rem;
+    font-family: inter;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: black;
+}
+.nav-links{
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    width: 100dvw;
+}
+.nav-links a{
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+}
+.nav-links a:hover{
+    color: #f1356f;
+    cursor: pointer;
+}
+.nav-links a:active, .nav-links a:visited{
+    color: white;
+    text-decoration: none;  
+}
+.back{
+    width: 100dvw;
+}
+.btn{
+    position: absolute;
+    top:0;
+    right:30px;
+    margin-top: 10px;
+    padding: 15px 25px;
+    background-color: #23a6f0;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: inter;
+    scale: .9;
+    box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+}
+.btn:hover{
+   background-color: #f1356d;
+   cursor: pointer;
+      transform: scale(1.1);
+    transition: .3s ease-in-out;
+}
+#learn-more:hover{
+    background-color: #f1356d;
+    cursor: pointer;
+       transform: scale(1.1);
+    transition: .3s ease-in-out;
+}
+#learn-more{ padding: 10px 10px; text-decoration: none; display: inline-block; }
+#get-quote:hover{
+    background-color: #f1356d;
+    cursor: pointer;
+       transform: scale(1.1);
+    transition: .3s ease-in-out;
+}
+.meet{
+    position: absolute;
+    top: 30%;
+    left: 12%;
+    font-size: 2.5rem;
+    width:500px
+}
+.text{
+    position: absolute;
+    top: 55%;
+    left: 12%;
+    font-family: inter;
+    font-size: 1.5em;
+    width: 600px;
+}
+#learn-more, #get-quote{
+    position: absolute;
+    top: 70%;
+    left: 12%;
+    padding: 15px 25px;
+    background-color: #23a6f0;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: inter;
+    scale: .9;
+    box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+}
+#get-quote{
+    left: 25%;
+}
+.appointment{
+    position: absolute;
+    top: 17%;
+    right: 10%;
+    padding: 10px 20px;
+    border-color: #23a6f0;
+    border-radius: 10px;
+    font-family: inter;
+    color: black;
+    background-color: rgba(247, 243, 243, 0.2);
+    box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+}
+.appointment form{
+    margin-top: 20px;
+}
+
+.appointment input{
+    background-color:rgba(247, 243, 243, 0.5); ;
+    border: none;
+    padding: 10px 30px;
+     border-radius: 5px;
+     box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+}
+.appointment select,
+.appointment input[type="date"],
+.appointment input[type="time"] {
+    background-color: rgba(247, 243, 243, 0.5);
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px rgba(3,3,3,0.12);
+}
+.appointment label{
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.appointment .form-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+    align-items: start;
+}
+.appointment .form-row{ display:flex; flex-direction:column; }
+.appointment .form-row.full{ grid-column: 1 / -1; display:flex; justify-content:center; }
+.appointment .form-row input, .appointment .form-row select{ width:100%; }
+.appointment .form-row button#one{ width:100%; max-width:320px; }
+.field-error{
+    color: #f1356d;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+#one{padding: 10px 20px;
+    background-color: #23a6f0;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    justify-self: center;
+    color: white;
+    scale: .9;
+    box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+
+}
+#one:hover{
+    background-color: #f1356d;
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: .3s ease-in-out;
+}
+.branding{
+justify-self: center;
+font-family: inter;
+font-size: 2rem;
+padding-top: 30px;
+}
+#we{
+    font-size: 1rem;
+}
+.testimony{
+    margin-top: 100px;
+    justify-self: center;
+    
+}
+.doctors{
+    margin-top: 20px;
+    width: 60dvw;
+    justify-self: center;
+    display: flex;
+    background-color: #23a6f0;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+    
+
+}
+.doctor{width: 25%;
+     scale: .9;
+     padding-left: 20px;
+
+}
+.doctor img{
+    width: 80%;
+    border-radius: 5px;box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+   
+}
+.doctor:hover{  cursor: pointer;
+    transform: scale(1.1);
+    transition: .3s ease-in-out;
+
+}
+/* About page styles */
+.about-page h1{ margin-bottom: 12px; color:#0f172a }
+.about-page p{ margin-bottom: 16px; color:#475569 }
+.about-page .team{ display:flex; gap:18px; margin-top: 12px }
+.about-page .member{ background:#fff; padding:12px; border-radius:12px; box-shadow:0 8px 20px rgba(15,23,42,0.06); text-align:center; width:220px }
+.about-page .member img{ width:80%; border-radius:8px }
+footer{ margin-top: 100px;
+    bottom: 0;
+    width: 100%;
+    background-color: #23a6f0;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    box-shadow: 0px 0px 10px rgba(3, 3, 3, 0.3);
+}
+.book{
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* Page-specific styles */
+.page-content {
+    max-width: 1100px;
+    margin: 120px auto 60px;
+    padding: 0 24px;
+    color: #0f172a;
+}
+
+.page-content h1,
+.page-content h2 {
+    margin-bottom: 16px;
+    color: #0f172a;
+}
+
+.page-content p {
+    margin-bottom: 24px;
+    line-height: 1.8;
+    color: #475569;
+}
+
+.product-form,
+.contact-form,
+.product-list,
+.pricing-cards,
+.contact-list {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    margin-bottom: 30px;
+}
+
+.product-form form,
+.contact-form form {
+    display: grid;
+    gap: 18px;
+}
+
+.product-form input,
+.product-form textarea,
+.contact-form input,
+.contact-form textarea,
+.product-form select {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: border-color .25s ease, background .25s ease;
+}
+
+.product-form input:focus,
+.product-form textarea:focus,
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #ffffff;
+}
+
+.product-form button,
+.contact-form button {
+    width: fit-content;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s ease, background .2s ease;
+}
+
+.product-form button:hover,
+.contact-form button:hover {
+    transform: translateY(-2px);
+    background: #1d4ed8;
+}
+
+.product-list ul,
+.contact-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 18px;
+}
+
+.product-list li,
+.contact-list li {
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.product-preview {
+    margin: 18px 0;
+}
+
+.product-preview img {
+    max-width: 320px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.pricing-cards {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.pricing-card {
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.pricing-card h2 {
+    margin-bottom: 14px;
+    color: #1d4ed8;
+}
+
+.pricing-card p {
+    margin-bottom: 16px;
+    color: #475569;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.nav-links {
+    position: relative;
+    width: auto;
+    justify-content: flex-end;
+    gap: 22px;
+    padding: 22px 30px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 0 0 16px 16px;
+}
+
+@media (max-width: 900px) {
+    .back{position: relative;
+    }
+    .meet{position: absolute;
+        top: 30%;
+        color: white;
+
+    }
+.doctors{
+    width: 90dvw;
+    justify-self: center;
+   margin-left: 50px; 
+}
+   .appointment{
+    position: absolute;
+    right: 0;
+    margin-top: 50px;
+   }
+   #learn-more{
+    margin-top: 100px;
+   }
+   .text{
+    width: 300px;
+   }
+}
+@media (max-width: 640px) {
+    /* keep .meet positioned so it can overlay the background image on small screens */
+    .text,
+    .appointment,
+    .nav-links,
+    .btn,
+    #learn-more,
+    #get-quote {
+        position: static;
+        width: 100%;
+        margin: 12px 0;
+    }
+
+    .hero-content { position: relative; }
+    .meet {
+        font-size: 2rem;
+        position: absolute;
+        top: 5%;
+        left: 6%;
+        color: #ffffff;
+        width: auto;
+        max-width: 80%;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+    }
+    .text {
+        position: absolute;
+        top: 20%;
+        left: 6%;
+        color: #ffffff;
+        max-width: 84%;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+        font-size: 1rem;
+    }
+    /* place Learn More over the background as well */
+    #learn-more {
+        position: absolute;
+        top: 25%;
+        left: 1%;
+        color: #ffffff;
+        text-decoration: none;
+        display: inline-block;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+        background-color: rgba(35,166,240,0.95);
+        padding: 10px 18px;
+        border-radius: 6px;
+    }
+    #we{
+        width: 90dvw;
+    }
+   
+
+
+    .doctors { 
+        width: 90%;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .doctor {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    /* Stack appointment form into single column on small screens */
+    .appointment .form-grid {
+        grid-template-columns: 1fr;
+        gap: 10px 0;
+    }
+
+    .appointment .form-row button#one { max-width: 100%; }
+}
+
+/* Tweak for very small screens (phones <480px) */
+@media (max-width: 480px) {
+    .meet { font-size: 1.6rem; left: 6%; width: auto; }
+    .text { font-size: 1rem; left: 6%; width: auto; }
+    .brand { font-size: 1.4rem; }
+    .appointment { right: 5%; padding: 8px 12px; }
+    .appointment input,
+    .appointment select,
+    .appointment input[type="date"],
+    .appointment input[type="time"] { padding: 8px 12px; }
+    .btn, #get-quote, #learn-more, #one { padding: 10px 14px; }
+    .page-content { margin: 80px auto 40px; }
+    .about-page .team { flex-direction: column; gap: 12px; }
+    .about-page .member { width: 100%; }
+    
+}
