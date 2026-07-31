@@ -21,9 +21,6 @@
                             <h3>{{ product.name }}</h3>
                             <p class="product-price">₦{{ product.price }}</p>
                             <p>{{ product.description }}</p>
-                            {% if product.file and not product.is_image %}
-                                <a class="product-download" href="{{ product.file.url }}" target="_blank">Download product file</a>
-                            {% endif %}
                             <a class="action-button" href="{% url 'checkout_product' product.pk %}">Buy product</a>
                         </div>
                     </article>

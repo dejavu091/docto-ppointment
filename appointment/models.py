@@ -12,7 +12,11 @@ class Product(models.Model):
     def is_image(self):
         if not self.file:
             return False
-        return self.file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp'))
+        path = self.file.name or ''
+        if not path and hasattr(self.file, 'url'):
+            path = self.file.url
+        path = path.lower().split('?')[0]
+        return path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp'))
 
     def __str__(self):
         return self.name
