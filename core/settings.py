@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,14 +28,15 @@ load_dotenv(dotenv_path=BASE_DIR / '.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 # Read the Django secret key from the environment. Set `DJANGO_SECRET_KEY`
 # in your local `.env` (not committed) or via environment variables in production.
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-change-me')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG','False') == 'True'
 
 ALLOWED_HOSTS = [h for h in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver').split(',') if h]
-
-
+render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname:
+    ALLOWED_HOSTS.append(render_hostname)
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,12 +83,24 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+DEFAULT_DATABASE = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'db.sqlite3',
 }
+
+DATABASE_URL = os.environ.get('NEW_DATABASE_URL') or os.environ.get('DATABASE_URL')
+
+DATABASES = {
+    'default': DEFAULT_DATABASE,
+}
+
+if DATABASE_URL:
+    try:
+        custom_database = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+        if custom_database:
+            DATABASES['default'] = custom_database
+    except Exception:
+        pass
 
 
 # Password validation
@@ -123,6 +138,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR /'staticfiles'
+
+STORAGES ={
+    'default' : {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles' : {
+        'BACKEND' : 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    }
+}
 
 # Media files uploaded by users
 MEDIA_URL = 'media/'
