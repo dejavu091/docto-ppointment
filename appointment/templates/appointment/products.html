@@ -23,9 +23,8 @@
                             <p>{{ product.description }}</p>
                             {% if product.file and not product.is_image %}
                                 <a class="product-download" href="{{ product.file.url }}" target="_blank">Download product file</a>
-                            {% elif product.file %}
-                                <a class="product-download" href="{{ product.file.url }}" target="_blank">View product file</a>
                             {% endif %}
+                            <a class="action-button" href="{% url 'checkout_product' product.pk %}">Buy product</a>
                         </div>
                     </article>
                 {% endfor %}

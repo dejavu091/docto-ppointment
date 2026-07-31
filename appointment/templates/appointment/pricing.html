@@ -12,6 +12,7 @@
                 <h2>{{ plan.name }}</h2>
                 <p>{{ plan.description }}</p>
                 <p class="price">₦{{ plan.price }}</p>
+                <a class="action-button" href="{% url 'checkout_plan' plan.pk %}">Subscribe</a>
             </article>
         {% endfor %}
     </section>

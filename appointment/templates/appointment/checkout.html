@@ -1,0 +1,25 @@
+{% extends 'appointment/base.html' %}
+
+{% block title %}{{ title }} | Docto-ppointment{% endblock %}
+
+{% block content %}
+<main class="page-content">
+    <section class="checkout-card">
+        <h2>{{ title }}</h2>
+        <p class="checkout-detail">You are about to {{ 'purchase' if item_type == 'product' else 'subscribe to' }} the following:</p>
+        <p><strong>{{ item.name }}</strong></p>
+        {% if item_type == 'product' and item.file and item.is_image %}
+            <div class="product-preview">
+                <img src="{{ item.file.url }}" alt="{{ item.name }} preview">
+            </div>
+        {% endif %}
+        <p>{{ item.description }}</p>
+        <p class="price">₦{{ item.price }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="action-button">{{ action_label }}</button>
+            <a href="{% url back_url %}" class="secondary-button">Back to {{ 'products' if item_type == 'product' else 'pricing' }}</a>
+        </form>
+    </section>
+</main>
+{% endblock %}

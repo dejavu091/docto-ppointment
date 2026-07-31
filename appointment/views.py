@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-from django.shortcuts import redirect, render
 from .forms import ContactInquiryForm, ProductForm, AppointmentForm
 from .models import ContactInquiry, PricingPlan, Product, Appointment
 
@@ -69,6 +69,34 @@ def pricing(request):
 
     return render(request, 'appointment/pricing.html', {
         'plans': plans,
+    })
+
+
+def checkout_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
+        messages.success(request, f'Purchase confirmed for "{product.name}". We will contact you soon.')
+        return redirect('products')
+    return render(request, 'appointment/checkout.html', {
+        'item': product,
+        'item_type': 'product',
+        'back_url': 'products',
+        'action_label': 'Confirm Purchase',
+        'title': 'Buy Product',
+    })
+
+
+def checkout_plan(request, plan_id):
+    plan = get_object_or_404(PricingPlan, pk=plan_id)
+    if request.method == 'POST':
+        messages.success(request, f'Subscription confirmed for "{plan.name}". We will contact you soon.')
+        return redirect('pricing')
+    return render(request, 'appointment/checkout.html', {
+        'item': plan,
+        'item_type': 'plan',
+        'back_url': 'pricing',
+        'action_label': 'Confirm Subscription',
+        'title': 'Subscribe to Plan',
     })
 
 
