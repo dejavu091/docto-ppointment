@@ -6,7 +6,15 @@
 <main class="page-content">
     <section class="checkout-card">
         <h2>{{ title }}</h2>
-        <p class="checkout-detail">You are about to {{ 'purchase' if item_type == 'product' else 'subscribe to' }} the following:</p>
+        <p class="checkout-detail">
+            You are about to
+            {% if item_type == 'product' %}
+                purchase
+            {% else %}
+                subscribe to
+            {% endif %}
+            the following:
+        </p>
         <p><strong>{{ item.name }}</strong></p>
         {% if item_type == 'product' and item.file and item.is_image %}
             <div class="product-preview">
@@ -18,7 +26,9 @@
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="action-button">{{ action_label }}</button>
-            <a href="{% url back_url %}" class="secondary-button">Back to {{ 'products' if item_type == 'product' else 'pricing' }}</a>
+            <a href="{% url back_url %}" class="secondary-button">
+                Back to {% if item_type == 'product' %}products{% else %}pricing{% endif %}
+            </a>
         </form>
     </section>
 </main>

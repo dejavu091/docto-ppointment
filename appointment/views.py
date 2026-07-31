@@ -134,3 +134,11 @@ def contact(request):
 
 def about(request):
     return render(request, 'appointment/about.html')
+
+
+def custom_404(request, exception=None):
+    return render(request, 'appointment/404.html', status=404)
+
+
+def custom_500(request):
+    return render(request, 'appointment/500.html', status=500)

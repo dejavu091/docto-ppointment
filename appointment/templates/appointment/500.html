@@ -1,0 +1,13 @@
+{% extends 'appointment/base.html' %}
+
+{% block title %}Server error | Docto-ppointment{% endblock %}
+
+{% block content %}
+<main class="page-content">
+    <section class="checkout-card">
+        <h2>500 — Server error</h2>
+        <p class="checkout-detail">Something went wrong on the server. Please try again later.</p>
+        <a href="{% url 'home' %}" class="action-button">Go back home</a>
+    </section>
+</main>
+{% endblock %}
