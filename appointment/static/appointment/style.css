@@ -361,6 +361,7 @@ footer{ margin-top: 100px;
     font-weight: 700;
     cursor: pointer;
     transition: transform .2s ease, background .2s ease;
+    text-decoration: none;
 }
 
 .product-form button:hover,
@@ -455,6 +456,7 @@ footer{ margin-top: 100px;
     font-weight: 700;
     cursor: pointer;
     transition: background .2s ease, transform .2s ease;
+    text-decoration: none;
 }
 
 .action-button:hover {
