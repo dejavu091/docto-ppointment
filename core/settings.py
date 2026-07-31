@@ -14,7 +14,17 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
+from decouple import config
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET'),
+    secure=True
+)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,15 +38,11 @@ load_dotenv(dotenv_path=BASE_DIR / '.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 # Read the Django secret key from the environment. Set `DJANGO_SECRET_KEY`
 # in your local `.env` (not committed) or via environment variables in production.
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me')
-
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG','False') == 'True'
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = [h for h in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver').split(',') if h]
-render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if render_hostname:
-    ALLOWED_HOSTS.append(render_hostname)
+ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'appointment.apps.AppointmentConfig',
+     'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -83,25 +91,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DEFAULT_DATABASE = {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
-}
+# DEFAULT_DATABASE = {
+#     'ENGINE': 'django.db.backends.sqlite3',
+#     'NAME': BASE_DIR / 'db.sqlite3',
+# }
 
-DATABASE_URL = os.environ.get('NEW_DATABASE_URL') or os.environ.get('DATABASE_URL')
+# DATABASE_URL = os.environ.get('NEW_DATABASE_URL') or os.environ.get('DATABASE_URL')
 
+# DATABASES = {
+#     'default': DEFAULT_DATABASE,
+# }
+
+# if DATABASE_URL:
+#     try:
+#         custom_database = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+#         if custom_database:
+#             DATABASES['default'] = custom_database
+#     except Exception:
+#         pass
 DATABASES = {
-    'default': DEFAULT_DATABASE,
+    'default': dj_database_url.parse(
+        config('DATABASE_URL', default=f"sqlite:///{BASE_DIR.as_posix()}/db.sqlite3")
+    )
 }
-
-if DATABASE_URL:
-    try:
-        custom_database = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
-        if custom_database:
-            DATABASES['default'] = custom_database
-    except Exception:
-        pass
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -138,20 +150,30 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR /'staticfiles'
+MEDIA_URL = '/media/'
+STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Note: MEDIA_ROOT is not needed when using Cloudinary storage
 
-STORAGES ={
-    'default' : {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
-    'staticfiles' : {
-        'BACKEND' : 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    }
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
+    },
 }
 
 # Media files uploaded by users
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
 # Email and admin notification settings
 ADMINS = [
