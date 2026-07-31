@@ -13,25 +13,23 @@
             <button type="submit">Send Message</button>
         </form>
     </section>
+    {% if can_see_inquiries %}
     <section class="contact-list">
         <h2>Contact Inquiries</h2>
-        {% if can_see_inquiries %}
-            {% if inquiries %}
-                <ul>
-                    {% for inquiry in inquiries %}
-                        <li>
-                            <strong>{{ inquiry.name }}</strong> ({{ inquiry.email }})<br>
-                            <em>{{ inquiry.subject }}</em><br>
-                            {{ inquiry.message }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No contact inquiries yet.</p>
-            {% endif %}
+        {% if inquiries %}
+            <ul>
+                {% for inquiry in inquiries %}
+                    <li>
+                        <strong>{{ inquiry.name }}</strong> ({{ inquiry.email }})<br>
+                        <em>{{ inquiry.subject }}</em><br>
+                        {{ inquiry.message }}
+                    </li>
+                {% endfor %}
+            </ul>
         {% else %}
-            <p>Only superusers can view contact messages.</p>
+            <p>No contact inquiries yet.</p>
         {% endif %}
     </section>
+    {% endif %}
 </main>
 {% endblock %}

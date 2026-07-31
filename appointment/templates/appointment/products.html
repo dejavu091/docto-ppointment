@@ -5,43 +5,40 @@
 {% block content %}
 <main class="page-content">
     <h1>Products</h1>
-    <p>Add medical products here.</p>
-    {% if can_upload %}
-    <section class="product-form">
-        <h2>Upload a Product</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Upload Product</button>
-        </form>
-    </section>
-    {% else %}
-    <section class="product-form">
-        <h2>Admin-only upload</h2>
-        <p>Only superusers can upload medical products.</p>
-    </section>
-    {% endif %}
+    <p>Browse our available medical products below.</p>
     <section class="product-list">
         <h2>Available Products</h2>
         {% if products %}
-            <ul>
+            <div class="product-grid">
                 {% for product in products %}
-                    <li>
-                        <strong>{{ product.name }}</strong> - ₦{{ product.price }}<br>
-                        {{ product.description }}<br>
-                        {% if product.file %}
-                            {% if product.is_image %}
-                                <div class="product-preview">
-                                    <img src="{{ product.file.url }}" alt="{{ product.name }} preview">
-                                </div>
-                            {% endif %}
-                            <a href="{{ product.file.url }}" target="_blank">Download file</a>
+                    <article class="product-card">
+                        {% if product.file and product.is_image %}
+                            <div class="product-preview">
+                                <img src="{{ product.file.url }}" alt="{{ product.name }} preview">
+                            </div>
                         {% endif %}
-                    </li>
+                        <div class="product-card-body">
+                            <h3>{{ product.name }}</h3>
+                            <p class="product-price">₦{{ product.price }}</p>
+                            <p>{{ product.description }}</p>
+                            {% if product.file and not product.is_image %}
+                                <a class="product-download" href="{{ product.file.url }}" target="_blank">Download product file</a>
+                            {% elif product.file %}
+                                <a class="product-download" href="{{ product.file.url }}" target="_blank">View product file</a>
+                            {% endif %}
+                        </div>
+                    </article>
                 {% endfor %}
-            </ul>
+            </div>
         {% else %}
-            <p>No products available yet.</p>
+            <div class="product-grid empty-state">
+                <article class="product-card empty-card">
+                    <div class="product-card-body">
+                        <h3>No products available yet</h3>
+                        <p>We are updating our catalog. Please check back soon for new medical products and resources.</p>
+                    </div>
+                </article>
+            </div>
         {% endif %}
     </section>
 </main>
