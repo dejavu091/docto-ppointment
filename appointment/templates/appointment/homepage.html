@@ -101,13 +101,21 @@
         </div>
         </div>
         {% if appointment_match %}
-        <div class="appointment-match-summary">
+        <div class="appointment-match-summary" id="appointment-match-summary">
+            <button class="match-summary-close" type="button" aria-label="Close appointment notification">×</button>
             <h3>Appointment Matched</h3>
             <p>
                 You have been matched to <strong>{{ appointment_match.hospital }}</strong>
                 {% if appointment_match.doctor %}with Dr. {{ appointment_match.doctor }}{% endif %}
                 for <strong>{{ appointment_match.service }}</strong>.
             </p>
+            <div class="appointment-match-details">
+                {% if appointment_match.doctor_phone %}
+                    <p><strong>Doctor Phone:</strong> {{ appointment_match.doctor_phone }}</p>
+                {% endif %}
+                <p><strong>Date:</strong> {{ appointment_match.date }}</p>
+                <p><strong>Time:</strong> {{ appointment_match.time }}</p>
+            </div>
         </div>
         {% endif %}
         <div class="nearest-hospitals-section">

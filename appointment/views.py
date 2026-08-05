@@ -35,8 +35,11 @@ def home(request):
 
             request.session['appointment_match_info'] = {
                 'service': appt.service.name if appt.service else appt.department,
-                'hospital': appt.hospital.name if appt.hospital else 'No hospital matched',
-                'doctor': appt.doctor.name if appt.doctor else '',
+                'hospital': selected_hospital.name if selected_hospital else 'No hospital matched',
+                'doctor': selected_doctor.name if selected_doctor else '',
+                'doctor_phone': selected_doctor.phone if selected_doctor else '',
+                'date': appt.date.strftime('%B %d, %Y'),
+                'time': appt.time.strftime('%I:%M %p'),
             }
 
             messages.success(request, 'Your appointment request was received. We will contact you to confirm.')

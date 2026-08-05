@@ -1,11 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
   const msgs = document.querySelector('.messages');
-  if (!msgs) return;
+  const matchSummary = document.getElementById('appointment-match-summary');
+  const matchClose = document.querySelector('.match-summary-close');
 
-  // Give users time to read, then add a class that fades and collapses the messages
-  setTimeout(function () {
-    msgs.classList.add('fade-out');
-    // remove from DOM after transition completes
-    setTimeout(function () { if (msgs.parentNode) msgs.parentNode.removeChild(msgs); }, 600);
-  }, 5000);
+  if (msgs) {
+    setTimeout(function () {
+      msgs.classList.add('fade-out');
+      setTimeout(function () { if (msgs.parentNode) msgs.parentNode.removeChild(msgs); }, 600);
+    }, 5000);
+  }
+
+  if (matchSummary && matchClose) {
+    matchClose.addEventListener('click', function () {
+      matchSummary.style.display = 'none';
+    });
+  }
 });
