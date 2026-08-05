@@ -1,6 +1,20 @@
 {% extends 'appointment/base.html' %}
 
+{% load static %}
+
 {% block title %}Doctor's Appointments{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+    <script>
+        // Inject Geoapify API key for client script. Safe to set empty when not configured.
+        window.GEOAPIFY_API_KEY_RAW = "{{ GEOAPIFY_API_KEY|escapejs }}";
+        // Also expose via body dataset so other scripts can read it if preferred.
+        document.documentElement.dataset.geoapifyKey = "{{ GEOAPIFY_API_KEY|escapejs }}";
+    </script>
+    <script src="{% static 'appointment/nearest_hospitals.js' %}" defer></script>
+{% endblock %}
 
 {% block hero %}
     <div class="hero-content">
@@ -77,7 +91,16 @@
                 </div>
             </form>
         </div>
-    </div>
+        </div>
+        <div class="nearest-hospitals-section">
+            <h2>Find Nearest Hospitals</h2>
+            <p id="nearest-status">Click the button to find hospitals near you. We'll ask for location permission.</p>
+            <button id="find-hospitals" class="btn">Find Nearest Hospitals</button>
+            <div id="nearest-container" style="display:none; margin-top:1rem;">
+                <div id="nearest-map" style="height:300px;width:100%;"></div>
+                <ul id="nearest-list"></ul>
+            </div>
+        </div>
 {% endblock %}
 
 {% block content %}

@@ -33,6 +33,7 @@ def home(request):
 
     return render(request, 'appointment/homepage.html', {
         'appointment_form': form,
+        'GEOAPIFY_API_KEY': getattr(settings, 'GEOAPIFY_API_KEY', ''),
     })
 
 

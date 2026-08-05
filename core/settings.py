@@ -199,3 +199,7 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False') == 'True'
+
+# Geoapify API key for Places searching. Set this in your local
+# `.env` as `GEOAPIFY_API_KEY` (restrict the key in Geoapify Console).
+GEOAPIFY_API_KEY = config('GEOAPIFY_API_KEY', default='')
