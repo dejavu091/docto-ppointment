@@ -43,11 +43,47 @@ class ContactInquiry(models.Model):
         return f"{self.name} - {self.subject}"
 
 
+class Service(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Hospital(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=500, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    services = models.ManyToManyField(Service, related_name='hospitals', blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Doctor(models.Model):
+    name = models.CharField(max_length=255)
+    specialty = models.CharField(max_length=255, blank=True)
+    hospital = models.ForeignKey(Hospital, related_name='doctors', on_delete=models.CASCADE)
+    phone = models.CharField(max_length=50, blank=True)
+    is_available = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        specialty = f" ({self.specialty})" if self.specialty else ''
+        return f"{self.name}{specialty}"
+
+
 class Appointment(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     phone = models.CharField(max_length=50)
-    department = models.CharField(max_length=255)
+    department = models.CharField(max_length=255, blank=True)
+    service = models.ForeignKey(Service, null=True, blank=True, on_delete=models.SET_NULL)
+    hospital = models.ForeignKey(Hospital, null=True, blank=True, on_delete=models.SET_NULL)
+    doctor = models.ForeignKey(Doctor, null=True, blank=True, on_delete=models.SET_NULL)
     date = models.DateField()
     time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)

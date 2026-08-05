@@ -70,6 +70,14 @@
                     </div>
 
                     <div class="form-row">
+                        <label for="id_service">Service Needed</label>
+                        {{ appointment_form.service }}
+                        {% for err in appointment_form.service.errors %}
+                            <div class="field-error">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-row">
                         <label for="id_date">Preferred Date</label>
                         {{ appointment_form.date }}
                         {% for err in appointment_form.date.errors %}
@@ -92,6 +100,16 @@
             </form>
         </div>
         </div>
+        {% if appointment_match %}
+        <div class="appointment-match-summary">
+            <h3>Appointment Matched</h3>
+            <p>
+                You have been matched to <strong>{{ appointment_match.hospital }}</strong>
+                {% if appointment_match.doctor %}with Dr. {{ appointment_match.doctor }}{% endif %}
+                for <strong>{{ appointment_match.service }}</strong>.
+            </p>
+        </div>
+        {% endif %}
         <div class="nearest-hospitals-section">
             <h2>Find Nearest Hospitals</h2>
             <p id="nearest-status">Click the button to find hospitals near you. We'll ask for location permission.</p>
@@ -100,6 +118,13 @@
                 <div id="nearest-map" style="height:300px;width:100%;"></div>
                 <ul id="nearest-list"></ul>
             </div>
+        </div>
+        <div class="hospital-registration-cta">
+            <div class="hospital-registration-copy">
+                <h2>Hospital Registration</h2>
+                <p>Hospitals can register services and doctors on a dedicated page. This keeps the homepage focused on patient booking.</p>
+            </div>
+            <a class="btn hospital-register-btn" href="{% url 'register_hospital' %}">Register Hospital</a>
         </div>
 {% endblock %}
 

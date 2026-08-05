@@ -1,0 +1,71 @@
+{% extends 'appointment/base.html' %}
+
+{% load static %}
+
+{% block title %}Register Hospital{% endblock %}
+
+{% block content %}
+    <div class="page-section hospital-register-page">
+        <h1>Register Your Hospital</h1>
+        <p>Fill in your hospital details, available services, and a primary doctor so patients can be matched quickly.</p>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ register_form.non_field_errors }}
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="id_name">Hospital Name</label>
+                    {{ register_form.name }}
+                    {% for err in register_form.name.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row">
+                    <label for="id_address">Hospital Address</label>
+                    {{ register_form.address }}
+                    {% for err in register_form.address.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row">
+                    <label for="id_phone">Hospital Phone</label>
+                    {{ register_form.phone }}
+                    {% for err in register_form.phone.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row full">
+                    <label for="id_services">Services</label>
+                    {{ register_form.services }}
+                    {% for err in register_form.services.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row">
+                    <label for="id_doctor_name">Doctor Name</label>
+                    {{ register_form.doctor_name }}
+                    {% for err in register_form.doctor_name.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row">
+                    <label for="id_doctor_specialty">Doctor Specialty</label>
+                    {{ register_form.doctor_specialty }}
+                    {% for err in register_form.doctor_specialty.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row">
+                    <label for="id_doctor_phone">Doctor Phone</label>
+                    {{ register_form.doctor_phone }}
+                    {% for err in register_form.doctor_phone.errors %}
+                        <div class="field-error">{{ err }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-row full form-actions">
+                    <button type="submit" class="btn register-submit-btn">Register Hospital</button>
+                </div>
+            </div>
+        </form>
+        <p><a class="back-link" href="{% url 'home' %}">Back to homepage</a></p>
+    </div>
+{% endblock %}

@@ -3,19 +3,44 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-from .forms import ContactInquiryForm, ProductForm, AppointmentForm
-from .models import ContactInquiry, PricingPlan, Product, Appointment
+from .forms import ContactInquiryForm, ProductForm, AppointmentForm, HospitalRegistrationForm
+from .models import ContactInquiry, PricingPlan, Product, Appointment, Service, Hospital, Doctor
 
 
 def home(request):
-    # handle appointment booking from the homepage
+    appointment_match = request.session.pop('appointment_match_info', None)
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            appt = form.save()
+            appt = form.save(commit=False)
+            service = appt.service
+            department = appt.department or ''
+
+            hospitals = Hospital.objects.filter(is_active=True)
+            if service:
+                hospitals = hospitals.filter(services=service)
+
+            available_doctors = Doctor.objects.filter(is_available=True, hospital__in=hospitals)
+            if department:
+                available_doctors = available_doctors.filter(specialty__icontains=department)
+
+            selected_doctor = available_doctors.order_by('hospital__name', 'name').first()
+            selected_hospital = selected_doctor.hospital if selected_doctor else hospitals.order_by('name').first()
+
+            if selected_hospital:
+                appt.hospital = selected_hospital
+            if selected_doctor:
+                appt.doctor = selected_doctor
+            appt.save()
+
+            request.session['appointment_match_info'] = {
+                'service': appt.service.name if appt.service else appt.department,
+                'hospital': appt.hospital.name if appt.hospital else 'No hospital matched',
+                'doctor': appt.doctor.name if appt.doctor else '',
+            }
+
             messages.success(request, 'Your appointment request was received. We will contact you to confirm.')
             admin_emails = [email for _, email in getattr(settings, 'ADMINS', [('Admin', 'admin@example.com')])]
-            # send templated notification to admins (plain + html)
             subject = f'New appointment request: {appt.name}'
             txt = render_to_string('appointment/emails/appointment_notification.txt', {'appt': appt})
             html = render_to_string('appointment/emails/appointment_notification.html', {'appt': appt})
@@ -33,7 +58,58 @@ def home(request):
 
     return render(request, 'appointment/homepage.html', {
         'appointment_form': form,
+        'appointment_match': appointment_match,
         'GEOAPIFY_API_KEY': getattr(settings, 'GEOAPIFY_API_KEY', ''),
+        'services': Service.objects.all().order_by('name'),
+        'hospitals': Hospital.objects.filter(is_active=True).order_by('name'),
+    })
+
+
+def register_hospital(request):
+    if request.method == 'POST':
+        form = HospitalRegistrationForm(request.POST)
+        if form.is_valid():
+            hospital_name = form.cleaned_data['name']
+            address = form.cleaned_data['address']
+            phone = form.cleaned_data['phone']
+            services_raw = form.cleaned_data['services']
+            doctor_name = form.cleaned_data['doctor_name']
+            doctor_specialty = form.cleaned_data['doctor_specialty']
+            doctor_phone = form.cleaned_data['doctor_phone']
+
+            hospital, _ = Hospital.objects.get_or_create(name=hospital_name, defaults={
+                'address': address,
+                'phone': phone,
+                'is_active': True,
+            })
+            if hospital.address != address:
+                hospital.address = address
+            if hospital.phone != phone:
+                hospital.phone = phone
+            hospital.is_active = True
+            hospital.save()
+
+            service_names = [name.strip() for name in services_raw.split(',') if name.strip()]
+            for name in service_names:
+                service, _ = Service.objects.get_or_create(name=name)
+                hospital.services.add(service)
+
+            Doctor.objects.get_or_create(
+                name=doctor_name,
+                hospital=hospital,
+                defaults={
+                    'specialty': doctor_specialty,
+                    'phone': doctor_phone,
+                    'is_available': True,
+                }
+            )
+            messages.success(request, 'Hospital and doctor registered successfully. Patients can now book by service.')
+            return redirect('register_hospital')
+    else:
+        form = HospitalRegistrationForm()
+
+    return render(request, 'appointment/hospital_register.html', {
+        'register_form': form,
     })
 
 
